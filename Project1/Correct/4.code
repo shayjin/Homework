@@ -1,0 +1,59 @@
+
+program int X , Y , XY 	;
+
+          read X, Y, XY;
+		  
+		  if !(X = Y)
+		  then
+			if X < Y
+			then
+				write 1;
+			else
+				write 2;
+			;
+		write 3;
+		; 
+		  
+		read X, Y, XY;
+		  
+		  if !(X = Y)
+		  then
+			if X < Y
+			then
+				write 10;
+			else
+				write 20;
+			;
+		write 30;
+		;
+		
+		read X, Y, XY;
+		  
+		  if !(X = Y)
+		  then
+			if X < Y
+			then
+				write 100;
+			else
+				write 200;
+			;
+		write 30;
+		;
+
+		read X, Y, XY;
+		  
+		if X = Y 
+		then
+			write 199;
+		else
+			if !(X <= Y)
+			then
+				write 29;
+			else
+				write 39;
+			;
+		;
+		
+		
+          end  
+      

@@ -1,0 +1,3 @@
+program int x, y, z; A (a, b, c) begin a = b < c; begin read x, y, z; A (x, y, z); end
+
+share
