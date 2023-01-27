@@ -22,6 +22,7 @@ do
 	${runner} Correct/${value}.code > Correct/${value}.student
 	echo ""
 	echo "Comparing with ${value}.expected"
+	
 	#Check for correct print
 	tr -d '[:space:]' < Correct/${value}.student > temp1
 	tr -d '[:space:]' < Correct/${value}.expected > temp2
