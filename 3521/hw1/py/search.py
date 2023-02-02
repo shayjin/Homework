@@ -85,11 +85,11 @@ def depthFirstSearch(problem):
     """
 
     visited = []
-    stack = util.Stack()
-    stack.push((problem.getStartState(), []))
+    openset = util.Stack()
+    openset.push((problem.getStartState(), []))
     
-    while not stack.isEmpty():
-      (state, actions) = stack.pop()
+    while not openset.isEmpty():
+      (state, actions) = openset.pop()
 
       if problem.isGoalState(state):
         return actions
@@ -100,7 +100,7 @@ def depthFirstSearch(problem):
         for successor in problem.getSuccessors(state):
           successor_actions = list(actions)
           successor_actions.append(successor[1])
-          stack.push((successor[0], successor_actions))
+          openset.push((successor[0], successor_actions))
           
     util.raiseNotDefined()
     
@@ -111,11 +111,11 @@ def breadthFirstSearch(problem):
     """
 
     visited = []
-    queue = util.Queue()
-    queue.push((problem.getStartState(), []))
+    openset = util.Queue()
+    openset.push((problem.getStartState(), []))
 
-    while not queue.isEmpty():
-      (state, actions) = queue.pop()
+    while not openset.isEmpty():
+      (state, actions) = openset.pop()
 
       if problem.isGoalState(state):
         return actions
@@ -126,7 +126,7 @@ def breadthFirstSearch(problem):
         for successor in problem.getSuccessors(state):
           successor_actions = list(actions)
           successor_actions.append(successor[1])
-          queue.push((successor[0], successor_actions))
+          openset.push((successor[0], successor_actions))
 
     util.raiseNotDefined()
 
@@ -136,11 +136,11 @@ def uniformCostSearch(problem):
     """
 
     visited = []
-    queue = util.PriorityQueue()
-    queue.push((problem.getStartState(), [], 0), 0)
+    openset = []
+    heappush(openset, (0, (problem.getStartState(), [])))
 
-    while not queue.isEmpty():
-      (state, actions, priority) = queue.pop()
+    while len(openset) > 0:
+      (state, actions) = heappop(openset)[1]
       
       if problem.isGoalState(state):
         return actions
@@ -152,9 +152,8 @@ def uniformCostSearch(problem):
           successor_actions = list(actions)
           successor_actions.append(successor[1])
 
-          cost = priority + successor[2]
-          queue.push((successor[0], successor_actions, cost), cost)
-          queue.update((successor[0], successor_actions, cost), cost)
+          cost = problem.getCostOfActions(successor_actions)
+          heappush(openset, (cost, (successor[0], successor_actions)))
 
     util.raiseNotDefined()
 
@@ -169,8 +168,31 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """
     YOUR CODE HERE
     """
-    util.raiseNotDefined()
 
+    visited = []
+    openset = util.PriorityQueue()
+    h_start = heuristic(problem.getStartState(), problem)
+    openset.push((problem.getStartState(), []), h_start)
+
+    while not openset.isEmpty():
+      (state, actions) = openset.pop()
+      
+      if problem.isGoalState(state):
+        return actions
+      
+      if state not in visited:
+        visited.append(state)
+
+        for successor in problem.getSuccessors(state):
+          successor_actions = list(actions)
+          successor_actions.append(successor[1])
+
+          cost = problem.getCostOfActions(successor_actions)
+          dist = heuristic(successor[0], problem)
+          openset.push((successor[0], successor_actions), cost + dist)
+          openset.update((successor[0], successor_actions), cost + dist)
+
+    util.raiseNotDefined()
 
 # Abbreviations
 bfs = breadthFirstSearch

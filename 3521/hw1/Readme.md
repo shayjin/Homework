@@ -134,7 +134,7 @@ Alternatively, you can use the `PriorityQueue` data structures provided to you i
 
 Open the file `py/search.py` and find the function  [`aStarSearch`](./py/search.py#L109).
 
-Finish the implementation of A* search (at "YOUR CODE HERE"). You can use the argument heuristic as a function: `dist = heuristic(state, problem)`. That is, try `h_start = heuristic(problem.getStartState(), problem); print(h_start)`. The class [`nullHeuristic`](./py/search.py#L102) outlines the input and output of a heuristic function. We have implemented the heuristic funcstions.
+Finish the implementation of A* search (at "YOUR CODE HERE"). You can use the argument heuristic as a function: `dist = heuristic(state, problem)`. That is, try `h_start = heuristic(problem.getStartState(), problem); print(h_start)`. The class [`nullHeuristic`](./py/search.py#L102) outlines the input and output of a heuristic function. We have implemented the heuristic functions.
 
 You can test it with pacman by running the following command:
 

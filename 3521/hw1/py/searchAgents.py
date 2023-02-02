@@ -205,10 +205,10 @@ class PositionSearchProblem(search.SearchProblem):
         include an illegal move, return 999999
         """
         if actions == None: return 999999
-        x,y= self.getStartState()
+        x,y = self.getStartState()
         cost = 0
         for action in actions:
-            # Check figure out the next state and see whether its' legal
+            # Check figure out the next state and see whether its legal
             dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]: return 999999
