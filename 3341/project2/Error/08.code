@@ -1,0 +1,8 @@
+program{
+	int x, y, z;
+begin{
+	reference a, b, c;
+	while 1==1 {
+		x = share b;
+	}
+}}

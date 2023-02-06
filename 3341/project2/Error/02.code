@@ -1,0 +1,8 @@
+program {
+	int x;
+begin {
+	if x==x then {
+		int y;
+	}
+	x=y;
+}}

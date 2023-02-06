@@ -1,0 +1,9 @@
+program {
+	int x,y,z;
+	reference a	,b	,c	;
+	begin {
+		x = read();
+		write(4);
+		a	=	new inst;
+	}
+}

@@ -1,0 +1,11 @@
+program {
+	int x, n;
+	begin {
+		x = 4;
+		while !(x==0) {
+			n = read();
+			x = x-1;
+			write(n);
+		}
+	}
+}
