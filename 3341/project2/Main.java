@@ -9,5 +9,6 @@ class Main {
 		Parser P = new Parser(S);
 
 		P.parse();
+
 	}
 }
