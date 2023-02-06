@@ -1,0 +1,15 @@
+current directory: /home/klejdi/project4/project4-group5/vendor/cache/ruby/3.0.0/gems/fast_blank-1.0.1/ext/fast_blank
+/home/klejdi/.rbenv/versions/3.0.1/bin/ruby -I /home/klejdi/.rbenv/versions/3.0.1/lib/ruby/3.0.0 -r ./siteconf20220324-21593-6r7w85.rb extconf.rb
+creating Makefile
+
+current directory: /home/klejdi/project4/project4-group5/vendor/cache/ruby/3.0.0/gems/fast_blank-1.0.1/ext/fast_blank
+make DESTDIR\= clean
+
+current directory: /home/klejdi/project4/project4-group5/vendor/cache/ruby/3.0.0/gems/fast_blank-1.0.1/ext/fast_blank
+make DESTDIR\=
+compiling fast_blank.c
+linking shared-object fast_blank.so
+
+current directory: /home/klejdi/project4/project4-group5/vendor/cache/ruby/3.0.0/gems/fast_blank-1.0.1/ext/fast_blank
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 fast_blank.so ./.gem.20220324-21593-h8ud6c

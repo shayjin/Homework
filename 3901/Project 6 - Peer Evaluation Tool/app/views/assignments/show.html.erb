@@ -1,0 +1,10 @@
+<% if notice %>
+<br><p class="p1" style="color: green"><%= notice %></p>
+<% end %>
+<br>
+<%= render @assignment %>
+  <% AssignmentsController.instance_variable_get(:'@x').push(@assignment.new_assignment) %>
+
+<div class="div1">
+  <%= link_to "Back to assignments", assignments_path %>
+</div>

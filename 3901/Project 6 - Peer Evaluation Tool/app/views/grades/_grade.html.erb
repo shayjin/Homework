@@ -1,0 +1,49 @@
+<div id="<%= dom_id grade %>">
+  <% if current_user.job != "Professor" %>
+    <tr>
+      <td>
+        <%= grade.assignment %>
+      </td>
+      <td>
+        <%= grade.score %>
+      </td>
+      <td>
+        <%= grade.feedback %>
+      </td>
+      <td>
+       <%= grade.evaluator %> (<%= grade.evaluator_group %>)
+      </td>
+      <td>
+        <%= grade.created_at.strftime("%m/%d/20%y")  %>
+      </td>
+    </tr>
+  <% else %>
+    <tr>
+      <td>
+        <%= grade.group %>
+      </td>
+      <td>
+        <%= grade.assignment %>
+      </td>
+      <td>
+        <%= grade.score %>
+      </td>
+      <td>
+        <%= grade.feedback %>
+      </td>
+
+      <td>
+        <%= grade.evaluator %> (<%= grade.evaluator_group %>)
+      </td>
+      <td>
+        <%= grade.updated_at.strftime("%m/%d/20%y")  %>
+      </td>
+      <td>
+        <%= link_to "Edit this grade", edit_grade_path(grade) %> 
+      </td>
+      <td>
+        <%= button_to "Delete this grade", grade, method: :delete %>
+      </td>
+    </tr>
+  <% end %>
+</div>

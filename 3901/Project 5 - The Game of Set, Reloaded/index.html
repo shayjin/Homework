@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<header>
+    <title>Game of Set</title>
+    <link href="style.css" rel="stylesheet"/>
+</header>
+
+<body style="background-color:rgb(207, 203, 203);">
+
+    <h2>JavaScript Game of Set - <span style="margin-top: -22px; margin-bottom:2px;"><a href="instructions.html">See Instructions</a></span></h2>
+    <div class="container">
+        <div id="displayedCards"></div>
+
+
+        <div id="info">
+                    <p>Card 1: <span id="card1-chosen"></span></p>
+                    <hr/>
+                    <p>Card 2: <span id="card2-chosen"></span>
+                        <hr/>
+                    <p>Card 3: <span id="card3-chosen"></span></p>
+                
+                    <hr/>
+
+                <p>Status: <span id="status"></span></p>
+                <p>
+                    <button id="hint" onclick="getHint()">Hint</button>
+                </p>
+                <hr/>
+                <p id="setsFound">Sets Found: </p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+
+</body>
+</html>

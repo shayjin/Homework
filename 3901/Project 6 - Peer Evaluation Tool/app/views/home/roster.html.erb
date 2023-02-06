@@ -1,0 +1,34 @@
+<br>
+<div class="div1" style="width:100%">
+<h1>Roster: <%= current_user.course %></h1>
+<table class="table table-striped">
+  <tr>
+    <th>
+      <strong>Name</strong>
+    </th>
+    <th>
+      <strong>email</strong>
+    </th>
+    <th>
+      <strong>Group</strong>
+    </th>
+  </tr>
+  <% index = 0 %>
+    <% Users.all.each do |user| %>
+        <% if user.name != nil %>
+            <tr>
+                <td> 
+                    <%= user.name %> 
+                </td>
+                <td> 
+                    <%= user.email %> 
+                </td>
+                <td> 
+                    <%= user.job %> 
+                </td>
+            </tr>
+        <% end %>
+        <% index = index + 1 %>
+    <% end %>
+</table>
+</div>

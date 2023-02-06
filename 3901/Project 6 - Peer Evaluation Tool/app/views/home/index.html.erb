@@ -1,0 +1,15 @@
+<% if notice %>
+<br><p class="p1" style="color: green"><%= notice %></p>
+<% end %>
+<br>
+<div class="div1">
+    <% if user_signed_in? %>
+      <h1>Hello, <%= current_user.name %>!</h1>
+      <br>
+      <p>Course: <%= current_user.course %></p>
+      <p>Your membership: <%= current_user.job %></p>
+
+    <% else %>
+      <%= controller.redirect_to "/users/sign_in" %>
+    <% end %>
+</div>

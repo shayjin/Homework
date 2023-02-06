@@ -1,0 +1,49 @@
+<%= form_with(model: grade) do |form| %>
+  <% if grade.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(grade.errors.count, "error") %> prohibited this grade from being saved:</h2>
+
+      <ul>
+        <% grade.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :Group, style: "display: block" %>
+    <%= form.select :group, ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5", "Group 6", "Group 7"] %>
+  </div>
+
+  <div class="field">
+    <%= form.label :assignment, style: "display: block" %>
+    <%= form.select :assignment, AssignmentsController.instance_variable_get(:'@x') %>
+  </div>
+
+  <div class="field">
+    <%= form.label :score, style: "display: block" %>
+    <%= form.number_field :score %>
+  </div>
+
+  <div class="field">
+    <%= form.label :feedback, style: "display: block" %>
+    <%= form.text_field :feedback %>
+  </div>
+
+  <br/>
+
+
+  <div style="display: none;">
+    <%= form.label :evaluator %>
+    <%= form.select :evaluator, [current_user.name] %>
+    <br/>
+    <%= form.label :evaluator_group %>
+    <%= form.select :evaluator_group, [current_user.job] %>
+  </div>
+
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

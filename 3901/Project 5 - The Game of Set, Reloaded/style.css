@@ -1,0 +1,91 @@
+* {
+	text-align: center;
+	margin-left:auto;
+	margin-right: auto;
+}
+
+hr {
+	width: 200px;
+}
+
+.card {
+	width: 100px;
+	box-sizing: border-box;
+	height: 150px;
+	padding: 15px;
+	background-Color: white;
+	border-radius: 5px;
+	font-size: 25pt;
+	vertical-align: hanging;
+	text-align: center;
+	color: red;
+	margin-bottom: 10px;
+	position: page;
+	box-shadow: 2px 2px 5px 3px #555;
+}
+
+.outer_card {
+	font-weight:bold;
+	width: 125spx;
+	height: 200px;
+	display: inline-table;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.card:hover {
+	top:-5px;
+	box-shadow: 2px 2px 8px 3px #333;
+}
+
+.card.purple {
+	color:purple;
+}
+
+.card.green {
+	color:green;
+}
+
+.displayedCards {
+	width: 30%;
+	display: grid;
+	gap: 25px;
+	grid-template-columns: repeat(4, 1fr);
+	text-align: center;
+    font-family: 'Arial';
+	margin-left: 200px;
+}
+.displayedCards2 {
+	width: 40%;
+	display: grid;
+	gap: 25px;
+	grid-template-columns: repeat(5, 1fr);
+	text-align: center;
+    font-family: 'Arial';
+}
+
+button {
+	border-radius: 0;
+	border:1px solid gray;
+}
+
+button:hover{
+	cursor: pointer;
+	background-color: rgb(221, 169, 109);
+}
+
+.container {
+	display: flex;
+}
+
+.container div {
+	flex:0,5;
+	
+}
+
+
+#info {
+	border: 5px solid black;
+	height: 295px;
+	
+}

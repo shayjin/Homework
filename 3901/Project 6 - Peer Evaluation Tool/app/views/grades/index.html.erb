@@ -1,0 +1,22 @@
+<br>
+<div class="div1" style="width:100%">
+<h1>Grades</h1>
+<% if current_user.job != "Professor" %>
+  <%= render "thead_for_stu" %>
+  <div id="grades">
+    <% @grades.each do |grade| %>
+      <% if current_user.job == grade.group %>
+          <%= render grade %>
+      <% end%>
+    <% end %>
+  </div>
+
+<% else %>
+  <%= render "thead_for_prof" %>
+  <div id="grades">
+    <% @grades.each do |grade| %>
+        <%= render grade %>
+    <% end %>
+  </div>
+<% end %>
+</div>
