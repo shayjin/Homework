@@ -4,10 +4,10 @@ import java.io.IOException;
 
 class Scanner {
 	public BufferedReader reader;
-	public Fun currToken;
-	public String idVal;
-	public int constVal;
-	public final String SYMBOLS = ";(),=!<+-*{}";
+	private Fun currToken;
+	private String idVal;
+	private int constVal;
+	private final String SYMBOLS = ";(),=!<+-*{}";
 	
 	// Constructor should open the file and find the first token
 	Scanner(String filename) throws IOException {

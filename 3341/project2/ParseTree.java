@@ -3,7 +3,7 @@ import java.util.List;
 
 public class ParseTree {
 
-    private Node type;
+    private NodeType type;
     private String value;
     private List<ParseTree> children;
 
@@ -11,12 +11,12 @@ public class ParseTree {
         this.children = new ArrayList<ParseTree>();
     }
 
-    public ParseTree(Node type) {
+    public ParseTree(NodeType type) {
         this.type = type;
         this.children = new ArrayList<ParseTree>();
     }
 
-    public ParseTree(Node type, String value) {
+    public ParseTree(NodeType type, String value) {
         this.type = type;
         this.value = value;
         this.children = new ArrayList<ParseTree>();
