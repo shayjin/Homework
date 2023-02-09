@@ -363,7 +363,7 @@ public class Parser {
             throw new IllegalStateException("error msg");
         }
 
-        parseTree.add(new ParseTree(NodeType.LBRACE));
+        parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
 
@@ -382,7 +382,7 @@ public class Parser {
                 throw new IllegalStateException("error msg");
             }
 
-            parseTree.add(new ParseTree(NodeType.NEGATION));
+            parseTree.add(new ParseTree(NodeType.LPAREN));
             S.nextTok();
 
             parseTree.add(parseCond(new ParseTree(NodeType.COND)));

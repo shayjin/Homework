@@ -4,13 +4,13 @@ program {
         x = 1;
         y = 10;
         z = 100;
-        while negation negation x == y) {
+        while !(x == y) {
             x = z - x;
             while 1 <= z {
                 z = z - 1;
                 x = y;
-                {
-                    {
-                        write(x);
-                    }
-                }
+            }
+        }
+        write(x);
+    }
+}

@@ -4,16 +4,16 @@ program {
         x = 5;
         y = 10;
         z = 100;
-        while negation negation x == 0) {
+        while !(x == 0) {
             x = x - 1;
-            while negation negation y == 100) {
+            while !(y == 100) {
                 y = y + 1;
                 while 0 <= z {
                     z = z - 1;
-                    {
-                        {
-                            write(x);
-                            {
-                                write(x);
-                            }
-                        }
+                }
+            }
+            write(x);
+        }
+        write(x);
+    }
+}

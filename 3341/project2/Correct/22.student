@@ -7,8 +7,8 @@ program {
         if x < y then {
             while(0 - 10) < x {
                 x = x - 1;
-                {
-                }
-                write(x);
             }
         }
+        write(x);
+    }
+}

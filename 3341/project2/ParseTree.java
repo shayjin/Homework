@@ -106,10 +106,12 @@ public class ParseTree {
             case INSTANCE: token = "inst"; break;
             case LESS: token = "<"; break;
             case LESSEQUAL: token = "<="; break;
+            case NEGATION: token = "!"; break;
+            case READ: token = "read()"; break;
             default: token = type.toString().toLowerCase();
         }
 
-        System.out.print(type);
+        System.out.print(token);
     }
 
     public void printSpaces(int space) {

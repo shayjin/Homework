@@ -2,10 +2,10 @@ program {
     int x, n;
     begin {
         x = 4;
-        while negation negation x == 0) {
-            n = read;
+        while !(x == 0) {
+            n = read();
             x = x - 1;
             write(n);
-            {
-            }
         }
+    }
+}
