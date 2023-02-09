@@ -62,6 +62,10 @@ public class Parser {
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
+        if (S.currentTok() != Fun.EOS) {
+            throw new IllegalStateException("error msg");
+        }
+
         return parseTree;
     }
 
@@ -81,6 +85,10 @@ public class Parser {
 
         parseTree.add(parseDeclInt(new ParseTree(NodeType.DECLINT)));
         parseTree.add(parseDeclRef(new ParseTree(NodeType.DECLREF)));
+
+        if (parseTree.getChildren().size() == 0) {
+            return new ParseTree();
+        }
 
         return parseTree;
     }
@@ -471,7 +479,6 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.ID, S.getID()));
             S.nextTok();
         } else if (S.currentTok() == Fun.CONST) {
-            System.out.println("hi");
             parseTree.add(new ParseTree(NodeType.CONST, S.getCONST() + ""));
             S.nextTok();
         } else if (S.currentTok() == Fun.LPAREN) {

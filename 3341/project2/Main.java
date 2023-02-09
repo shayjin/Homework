@@ -5,10 +5,9 @@ class Main {
 
 		// Initialize the scanner with the input file
 		Scanner S = new Scanner(args[0]);
-		
 		Parser P = new Parser(S);
 
-		P.parse();
-
+		ParseTree parseTree = P.parse();
+		parseTree.prettyPrint();
 	}
 }

@@ -22,10 +22,24 @@ public class ParseTree {
         this.children = new ArrayList<ParseTree>();
     }
 
+    public List<ParseTree> getChildren() {
+        return this.children;
+    }
+
     public void add(ParseTree parseTree) {
         if (parseTree.type != null) {
             children.add(parseTree);
-            System.out.println(parseTree.type);
+        }
+    }
+
+    public void prettyPrint() {
+        if (this.children.size() == 0) {
+            System.out.println(this.type);
+        } 
+
+        for (int i = 0; i < this.children.size(); i++) {
+            ParseTree node = this.children.get(i);
+            node.prettyPrint();
         }
     }
 }   
