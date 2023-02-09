@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.text.ParseException;
 
+import org.w3c.dom.Node;
+
 public class Parser {
     private Scanner S;
+    private static NodeType prev;
 
     public Parser(Scanner S) {
         this.S = S;
@@ -254,6 +257,7 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.ADD));
             S.nextTok();
 
+            prev = NodeType.ADD;
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else if (S.currentTok() == Fun.SUB) {
             parseTree.add(new ParseTree(NodeType.SUB));
@@ -506,7 +510,7 @@ public class Parser {
 
             S.nextTok();
         } else {
-            throw new IllegalStateException("error msg");
+            throw new IllegalStateException(prev + " is in an unexpected place. ");
         }
 
         return parseTree;

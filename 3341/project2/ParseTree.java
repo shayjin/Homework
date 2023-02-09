@@ -14,6 +14,9 @@ public class ParseTree {
     private static boolean start = true;
     private static NodeType prev;
 
+    private static List<List<String>> variables = new ArrayList<List<String>>();
+    private static int scopeCount = 0;
+
     public ParseTree() {
         this.children = new ArrayList<ParseTree>();
     }
@@ -112,6 +115,35 @@ public class ParseTree {
         }
 
         System.out.print(token);
+
+        if (type == NodeType.LBRACE) {
+            variables.add(new ArrayList<String>());
+        } else if (prev == NodeType.INT) {
+            List<String> temp = variables.get(variables.size() - 1);
+
+            for (List<String> scope : variables) {
+                if (scope.contains(token)) {
+                    throw new IllegalStateException("duplicate variables");
+                }
+            }
+
+            temp.add(token);
+            variables.set(variables.size() - 1, temp);
+        } else if (type == NodeType.RBRACE) {
+            variables.remove(variables.size() - 1);
+        } else if (type == NodeType.ID) {
+            boolean contains = false;
+
+            for (List<String> scope : variables) {
+                if (scope.contains(token)) {
+                    contains = true;
+                }
+            }
+
+            if (!contains) {
+                throw new IllegalStateException("undeclared varialble");
+            }
+        }
     }
 
     public void printSpaces(int space) {
