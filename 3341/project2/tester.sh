@@ -19,7 +19,7 @@ for value in {1..26}
 do
 	echo ""
 	echo "Running ${value}.code"
-	timeout 5 ${runner} Correct/${value}.code > Correct/${value}.student
+	${runner} Correct/${value}.code > Correct/${value}.student
 	#Check for correct print
 	tr -d '[:space:]' < Correct/${value}.student > temp1
 	tr -d '[:space:]' < Correct/${value}.code > temp2

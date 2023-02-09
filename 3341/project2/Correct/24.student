@@ -1,0 +1,17 @@
+program {
+    int x, y, z;
+    begin {
+        x = 5;
+        y = 10;
+        while negation negation x == y) {
+            if x <= y then {
+                x = x + 2;
+            }
+            if negation negation x < y) then {
+                y = y + 1;
+            }
+            {
+                write(x);
+                write(y);
+            }
+        }

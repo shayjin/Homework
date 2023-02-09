@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Node;
+
 public class ParseTree {
 
     private NodeType type;
@@ -8,7 +10,9 @@ public class ParseTree {
     private List<ParseTree> children;
     private static int indent = 0;
     private static int space = 1;
+    private final int offset = 4;
     private static boolean start = true;
+    private static NodeType prev;
 
     public ParseTree() {
         this.children = new ArrayList<ParseTree>();
@@ -38,26 +42,41 @@ public class ParseTree {
     public void prettyPrint() {
         if (this.children.size() == 0) {
             if (start) {
-                if (this.type == NodeType.RBRACE) indent -= space;
-                printSpaces(indent);
+                if (prev == NodeType.RBRACE && this.type != NodeType.ELSE) {
+                    System.out.println();
+                } 
+
+                if (this.type == NodeType.RBRACE) {
+                    indent -= offset;
+                } 
+
+                if (this.type == NodeType.ELSE) printSpaces(space);
+                else printSpaces(indent);
                 start = false;
             } else {
-                if (this.type != NodeType.SEMICOLON) printSpaces(space);
+                if (
+                    this.type != NodeType.SEMICOLON && 
+                    this.type != NodeType.RPAREN && 
+                    this.type != NodeType.LPAREN &&
+                    this.type != NodeType.COMMA &&
+                    prev != NodeType.LPAREN
+                ) printSpaces(space);
             }
 
             printToken(this.type, this.value);
 
             if (this.type == NodeType.LBRACE) {
-                indent += space;
+                indent += offset;
                 System.out.println();
                 start = true;
             } else if (this.type == NodeType.SEMICOLON) {
-                System.out.println();
                 start = true;
-            } else if (this.type == NodeType.RBRACE) {
                 System.out.println();
+            } else if (this.type == NodeType.RBRACE) {
                 start = true;
             }
+
+            prev = this.type;
         } 
 
         for (int i = 0; i < this.children.size(); i++) {
@@ -69,22 +88,28 @@ public class ParseTree {
     public void printToken(NodeType type, String value) {
         String token = "";
         
-        switch (type.toString()) {
-            case "LBRACE": token = "{"; break;
-            case "RBRACE": token = "}"; break;
-            case "REF": token = "reference"; break;
-            case "ADD": token = "+"; break;
-            case "SUB": token = "-"; break;
-            case "MULT": token = "*"; break;
-            case "ID": token = value; break;
-            case "CONST": token = value; break;
-            case "ASSIGN": token = "="; break;
-            case "SEMICOLON": token = ";"; break;
+        switch (type) {
+            case LBRACE: token = "{"; break;
+            case RBRACE: token = "}"; break;
+            case REF: token = "reference"; break;
+            case ADD: token = "+"; break;
+            case SUB: token = "-"; break;
+            case MULT: token = "*"; break;
+            case ID: token = value; break;
+            case CONST: token = value; break;
+            case ASSIGN: token = "="; break;
+            case EQUAL: token = "=="; break;
+            case LPAREN: token = "("; break;
+            case RPAREN: token = ")"; break;
+            case SEMICOLON: token = ";"; break;
+            case COMMA: token = ","; break;
+            case INSTANCE: token = "inst"; break;
+            case LESS: token = "<"; break;
+            case LESSEQUAL: token = "<="; break;
             default: token = type.toString().toLowerCase();
         }
 
-        System.out.print(token);
-
+        System.out.print(type);
     }
 
     public void printSpaces(int space) {

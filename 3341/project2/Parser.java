@@ -159,6 +159,10 @@ public class Parser {
 
         parseTree.add(parseStmt(new ParseTree(NodeType.STMT)));
         
+        if (S.currentTok() != Fun.RBRACE) {
+            parseTree.add(parseStmtSeq(new ParseTree(NodeType.STMTSEQ)));
+        }
+        
         return parseTree;
     }
 
@@ -444,13 +448,6 @@ public class Parser {
         parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
         if (S.currentTok() == Fun.EQUAL) {
-            parseTree.add(new ParseTree(NodeType.EQUAL));
-            S.nextTok();
-
-            if (S.currentTok() != Fun.EQUAL) {
-                throw new IllegalStateException("error msg");
-            }
-
             parseTree.add(new ParseTree(NodeType.EQUAL));
             S.nextTok();
 

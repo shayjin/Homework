@@ -1,0 +1,9 @@
+program {
+    int x, y;
+    begin {
+        x = 1;
+        y = 2;
+        write(x);
+        write(y);
+    }
+}
