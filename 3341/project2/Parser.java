@@ -42,7 +42,7 @@ public class Parser {
         S.nextTok();
 
         if (S.currentTok() != Fun.LBRACE) {
-            throw new IllegalStateException("error msg");
+            throw new IllegalStateException("{ expected but not found. ");
         }
 
         parseTree.add(new ParseTree(NodeType.LBRACE));

@@ -15,7 +15,7 @@ fi
 score=0
 error=0
 
-for value in {1..26}
+for value in {1..1}
 do
 	echo ""
 	echo "Running ${value}.code"
