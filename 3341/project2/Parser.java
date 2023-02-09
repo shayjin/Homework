@@ -59,14 +59,14 @@ public class Parser {
 
 
         if (S.currentTok() != Fun.RBRACE) {
-            throw new IllegalStateException("error msg");
+            throw new IllegalStateException("} expected. ");
         }
 
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
         if (S.currentTok() != Fun.EOS) {
-            throw new IllegalStateException("error msg");
+            throw new IllegalStateException(S.currentTok() + " is at an unexpected place. ");
         }
 
         return parseTree;
@@ -239,7 +239,7 @@ public class Parser {
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
             if (S.currentTok() != Fun.SEMICOLON) {
-                throw new IllegalStateException("error msg");
+                throw new IllegalStateException("; expected but " + S.currentTok() + " found. ");
             }
 
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
@@ -435,7 +435,7 @@ public class Parser {
             S.nextTok();
     
             if (S.currentTok() != Fun.SEMICOLON) {
-                throw new IllegalStateException("error msg");
+                throw new IllegalStateException("; expected but not found. ");
             }
     
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
@@ -467,7 +467,7 @@ public class Parser {
 
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else {
-            throw new IllegalStateException("error msg");
+            throw new IllegalStateException(S.currentTok() + " in an unexpected place. ");
         }
 
         return parseTree;

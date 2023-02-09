@@ -13,9 +13,14 @@ public class ParseTree {
     private final int offset = 4;
     private static boolean start = true;
     private static NodeType prev;
+    private static String prevVal;
+
+    static String tempVar = "";
+
+    private static String recent = "";
 
     private static List<List<String>> variables = new ArrayList<List<String>>();
-    private static int scopeCount = 0;
+    private static List<List<String>> references = new ArrayList<List<String>>();
 
     public ParseTree() {
         this.children = new ArrayList<ParseTree>();
@@ -80,6 +85,7 @@ public class ParseTree {
             }
 
             prev = this.type;
+            prevVal = this.value;
         } 
 
         for (int i = 0; i < this.children.size(); i++) {
@@ -118,21 +124,71 @@ public class ParseTree {
 
         if (type == NodeType.LBRACE) {
             variables.add(new ArrayList<String>());
+            references.add(new ArrayList<String>());
+        } else if (prev == NodeType.COMMA) {
+            if (recent == "ref") {
+                List<String> temp = references.get(references.size() - 1);
+
+                if (variables.get(variables.size() - 1).contains(token)) {
+                    throw new IllegalStateException("duplicate variables");
+                }
+    
+                temp.add(token);
+
+                references.set(references.size() - 1, temp);
+            } else if (recent == "int") {
+                List<String> temp = variables.get(variables.size() - 1);
+
+                if (variables.get(variables.size() - 1).contains(token)) {
+                    throw new IllegalStateException("duplicate variables");
+                }
+    
+                temp.add(token);
+
+                variables.set(variables.size() - 1, temp);
+            }
+
+
         } else if (prev == NodeType.INT) {
             List<String> temp = variables.get(variables.size() - 1);
 
-            for (List<String> scope : variables) {
-                if (scope.contains(token)) {
-                    throw new IllegalStateException("duplicate variables");
-                }
+            if (variables.get(variables.size() - 1).contains(token)) {
+                throw new IllegalStateException("duplicate variables");
             }
 
             temp.add(token);
             variables.set(variables.size() - 1, temp);
+            recent = "int";
+        } else if (prev == NodeType.REF) {
+            List<String> temp = references.get(references.size() - 1);
+
+            if (references.get(references.size() - 1).contains(token)) {
+                throw new IllegalStateException("duplicate variables");
+            }
+
+            temp.add(token);
+            references.set(references.size() - 1, temp);
+
+            recent = "ref";
         } else if (type == NodeType.RBRACE) {
             variables.remove(variables.size() - 1);
+        } else if (type == NodeType.ASSIGN) {
+            tempVar = prevVal;
+        } else if (type == NodeType.SHARE) {
+            boolean contains = false;
+
+            for (List<String> scope : references) {
+                if (scope.contains(tempVar)) {
+                    contains = true;
+                }
+            }
+
+            if (!contains) {
+                throw new IllegalStateException("int variable " + tempVar + " used in 'id = share id' assignment");
+            }
         } else if (type == NodeType.ID) {
             boolean contains = false;
+            boolean contains2 = false;
 
             for (List<String> scope : variables) {
                 if (scope.contains(token)) {
@@ -140,8 +196,20 @@ public class ParseTree {
                 }
             }
 
-            if (!contains) {
-                throw new IllegalStateException("undeclared varialble");
+            for (List<String> scope : references) {
+                if (scope.contains(token)) {
+                    contains2 = true;
+                }
+            }
+
+            if (!contains && !contains2) {
+                throw new IllegalStateException(token + " is an undeclared varialble. ");
+            }
+
+            if (prev == NodeType.SHARE) {
+                if (!contains2) {
+                    throw new IllegalStateException("int variable used in 'id = share id' assignment");
+                }
             }
         }
     }
@@ -151,5 +219,4 @@ public class ParseTree {
             System.out.print(" ");
         }
     }
-
-}   
+} 
