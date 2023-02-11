@@ -7,7 +7,7 @@ class Main {
 		Scanner S = new Scanner(args[0]);
 		Parser P = new Parser(S);
 
-		ParseTree parseTree = P.parse();
-		parseTree.prettyPrint();
+		ParseTree parseTree = P.parse(); // parsing
+		parseTree.prettyPrint(); // pretty-printing
 	}
 }

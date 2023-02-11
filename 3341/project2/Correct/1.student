@@ -1,8 +1,6 @@
 program {
     int x;
     begin {
-        x = 1;
-        int y;
-        y = x;
+        x = 10;
     }
 }

@@ -1,7 +1,4 @@
 import java.io.IOException;
-import java.text.ParseException;
-
-import org.w3c.dom.Node;
 
 public class Parser {
     private Scanner S;
@@ -11,95 +8,87 @@ public class Parser {
         this.S = S;
     }
 
-    public ParseTree parse() throws IllegalStateException, IOException {
+    private void errorMsg(String expected, String found) {
+        System.out.println("\nERROR: Token '" + expected + "' expected but token '" + found + "' found. ");
+        System.exit(-1);
+    }
+
+    private void errorMsg(String found) {
+        System.out.println("\nERROR: Token '" + found + "' found at an unexpected place. ");
+        System.exit(-1);
+    }
+
+    public ParseTree parse() throws IOException {
         return parseProg();
     }
 
-    public ParseTree parseProg() throws IllegalStateException, IOException {
+    private ParseTree parseProg() throws IOException {
         ParseTree parseTree = new ParseTree();
 
-        if (S.currentTok() != Fun.PROGRAM) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.PROGRAM) errorMsg("program", S.currentTok().toString());
+        
 
         parseTree.add(new ParseTree(NodeType.PROGRAM));
         S.nextTok();
 
-        if (S.currentTok() != Fun.LBRACE) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.LBRACE) errorMsg("{", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.LBRACE));
         S.nextTok();
 
         parseTree.add(parseDeclSeq(new ParseTree(NodeType.DECLSEQ)));
 
-        if (S.currentTok() != Fun.BEGIN) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.BEGIN) errorMsg("begin", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.BEGIN));
         S.nextTok();
 
-        if (S.currentTok() != Fun.LBRACE) {
-            throw new IllegalStateException("{ expected but not found. ");
-        }
-
+        if (S.currentTok() != Fun.LBRACE) errorMsg("{", S.currentTok().toString());
         parseTree.add(new ParseTree(NodeType.LBRACE));
         S.nextTok();
 
         parseTree.add(parseStmtSeq(new ParseTree(NodeType.STMTSEQ)));
 
-        if (S.currentTok() != Fun.RBRACE) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.RBRACE) errorMsg("}", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
 
-        if (S.currentTok() != Fun.RBRACE) {
-            throw new IllegalStateException("} expected. ");
-        }
+        if (S.currentTok() != Fun.RBRACE) errorMsg("}", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
         if (S.currentTok() != Fun.EOS) {
-            throw new IllegalStateException(S.currentTok() + " is at an unexpected place. ");
+            errorMsg(S.currentTok().toString());
         }
 
         return parseTree;
     }
 
-    public ParseTree parseDeclSeq(ParseTree root) throws IOException {
+    private ParseTree parseDeclSeq(ParseTree root) throws IOException {
         ParseTree parseTree = root;
         parseTree.add(parseDecl(new ParseTree(NodeType.DECL)));
 
-        if (S.currentTok() == Fun.INT) {
-            parseTree.add(parseDeclSeq(new ParseTree(NodeType.DECLSEQ)));
-        }
+        if (S.currentTok() == Fun.INT) parseTree.add(parseDeclSeq(new ParseTree(NodeType.DECLSEQ)));
 
         return parseTree;
     }
 
-    public ParseTree parseDecl(ParseTree root) throws IOException {
+    private ParseTree parseDecl(ParseTree root) throws IOException {
         ParseTree parseTree = root;
 
         parseTree.add(parseDeclInt(new ParseTree(NodeType.DECLINT)));
         parseTree.add(parseDeclRef(new ParseTree(NodeType.DECLREF)));
 
-        if (parseTree.getChildren().size() == 0) {
-            return new ParseTree();
-        }
+        if (parseTree.getChildren().size() == 0) return new ParseTree();
 
         return parseTree;
     }
 
-    public ParseTree parseDeclInt(ParseTree root) throws IOException {
-        if (S.currentTok() != Fun.INT) {
-            return new ParseTree();
-        }
+    private ParseTree parseDeclInt(ParseTree root) throws IOException {
+        if (S.currentTok() != Fun.INT) return new ParseTree();
 
         ParseTree parseTree = root;
         parseTree.add(new ParseTree(NodeType.INT));
@@ -107,9 +96,7 @@ public class Parser {
 
         parseTree.add(parseIdList(new ParseTree(NodeType.IDLIST)));
 
-        if (S.currentTok() != Fun.SEMICOLON) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.SEMICOLON) errorMsg(";", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.SEMICOLON));
         S.nextTok();
@@ -117,10 +104,8 @@ public class Parser {
         return parseTree;
     }
     
-    public ParseTree parseIdList(ParseTree root) throws IOException {
-        if (S.currentTok() != Fun.ID) {
-            throw new IllegalStateException("error msg");
-        }
+    private ParseTree parseIdList(ParseTree root) throws IOException {
+        if (S.currentTok() != Fun.ID) errorMsg("id", S.currentTok().toString());
 
         ParseTree parseTree = root;
         parseTree.add(new ParseTree(NodeType.ID, S.getID()));
@@ -136,7 +121,7 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseDeclRef(ParseTree root) throws IOException {
+    private ParseTree parseDeclRef(ParseTree root) throws IOException {
         if (S.currentTok() != Fun.REF) {
             return new ParseTree();
         }
@@ -147,9 +132,7 @@ public class Parser {
 
         parseTree.add(parseIdList(new ParseTree(NodeType.IDLIST)));
 
-        if (S.currentTok() != Fun.SEMICOLON) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.SEMICOLON) errorMsg(";", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.SEMICOLON));
         S.nextTok();
@@ -157,19 +140,21 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseStmtSeq(ParseTree root) throws IOException {
+    private ParseTree parseStmtSeq(ParseTree root) throws IOException {
         ParseTree parseTree = root;
 
         parseTree.add(parseStmt(new ParseTree(NodeType.STMT)));
         
-        if (S.currentTok() != Fun.RBRACE) {
+        if (S.currentTok() == Fun.ID || S.currentTok() == Fun.IF || 
+            S.currentTok() == Fun.WHILE || S.currentTok() == Fun.WRITE ||
+            S.currentTok() == Fun.INT || S.currentTok() == Fun.REF) {
             parseTree.add(parseStmtSeq(new ParseTree(NodeType.STMTSEQ)));
         }
         
         return parseTree;
     }
 
-    public ParseTree parseStmt(ParseTree root) throws IOException {
+    private ParseTree parseStmt(ParseTree root) throws IOException {
         ParseTree parseTree = root;
         parseTree.add(parseAssign(new ParseTree(NodeType.ASSIGN)));
         parseTree.add(parseIf(new ParseTree(NodeType.IF)));
@@ -181,7 +166,7 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseAssign(ParseTree root) throws IOException {
+    private ParseTree parseAssign(ParseTree root) throws IOException {
         if (S.currentTok() != Fun.ID) {
             return new ParseTree();
         }
@@ -190,9 +175,7 @@ public class Parser {
         parseTree.add(new ParseTree(NodeType.ID, S.getID()));
         S.nextTok();
 
-        if (S.currentTok() != Fun.ASSIGN) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.ASSIGN) errorMsg("=", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.ASSIGN));
         S.nextTok();
@@ -201,16 +184,12 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.NEW));
             S.nextTok();
 
-            if (S.currentTok() != Fun.INSTANCE) {
-                throw new IllegalStateException("error msg");
-            } 
+            if (S.currentTok() != Fun.INSTANCE) errorMsg("instance", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.INSTANCE));
             S.nextTok();
 
-            if (S.currentTok() != Fun.SEMICOLON) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.SEMICOLON) errorMsg(";", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
             S.nextTok();
@@ -220,16 +199,12 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.SHARE));
             S.nextTok();
 
-            if (S.currentTok() != Fun.ID) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.ID) errorMsg("id", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.ID, S.getID()));
             S.nextTok();
 
-            if (S.currentTok() != Fun.SEMICOLON) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.SEMICOLON) errorMsg(";", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
             S.nextTok();
@@ -238,9 +213,7 @@ public class Parser {
         } else {
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
-            if (S.currentTok() != Fun.SEMICOLON) {
-                throw new IllegalStateException("; expected but " + S.currentTok() + " found. ");
-            }
+            if (S.currentTok() != Fun.SEMICOLON) errorMsg(";", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
             S.nextTok();
@@ -249,7 +222,7 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseExpr(ParseTree root) throws IOException {
+    private ParseTree parseExpr(ParseTree root) throws IOException {
         ParseTree parseTree = root;
         parseTree.add(parseTerm(new ParseTree(NodeType.TERM)));
 
@@ -269,7 +242,7 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseTerm(ParseTree root) throws IOException {
+    private ParseTree parseTerm(ParseTree root) throws IOException {
         ParseTree parseTree = root;
         parseTree.add(parseFactor(new ParseTree(NodeType.FACTOR)));
 
@@ -283,7 +256,7 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseIf(ParseTree root) throws IOException {
+    private ParseTree parseIf(ParseTree root) throws IOException {
         if (S.currentTok() != Fun.IF) {
             return new ParseTree();
         }
@@ -295,25 +268,19 @@ public class Parser {
 
         parseTree.add(parseCond(new ParseTree(NodeType.COND)));
 
-        if (S.currentTok() != Fun.THEN) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.THEN) errorMsg("then", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.THEN));
         S.nextTok();
 
-        if (S.currentTok() != Fun.LBRACE) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.LBRACE) errorMsg("{", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.LBRACE));
         S.nextTok();
 
         parseTree.add(parseStmtSeq(new ParseTree(NodeType.STMTSEQ)));
 
-        if (S.currentTok() != Fun.RBRACE) {
-            throw new IllegalStateException("error msg");
-        } 
+        if (S.currentTok() != Fun.RBRACE) errorMsg("}", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
@@ -322,18 +289,14 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.ELSE));
             S.nextTok();
 
-            if (S.currentTok() != Fun.LBRACE) {
-                throw new IllegalStateException("error msg");
-            }
-            
+            if (S.currentTok() != Fun.LBRACE) errorMsg("{", S.currentTok().toString());
+
             parseTree.add(new ParseTree(NodeType.LBRACE));
             S.nextTok();
 
             parseTree.add(parseStmtSeq(new ParseTree(NodeType.STMTSEQ)));
 
-            if (S.currentTok() != Fun.RBRACE) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.RBRACE) errorMsg("}", S.currentTok().toString());
             
             parseTree.add(new ParseTree(NodeType.RBRACE));
             S.nextTok();
@@ -342,7 +305,7 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseLoop(ParseTree root) throws IOException {
+    private ParseTree parseLoop(ParseTree root) throws IOException {
         if (S.currentTok() != Fun.WHILE) {
             return new ParseTree();
         }
@@ -354,46 +317,36 @@ public class Parser {
 
         parseTree.add(parseCond(new ParseTree(NodeType.COND)));
 
-        if (S.currentTok() != Fun.LBRACE) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.LBRACE) errorMsg("{", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.LBRACE));
         S.nextTok();
 
         parseTree.add(parseStmtSeq(new ParseTree(NodeType.STMTSEQ)));
 
-        if (S.currentTok() != Fun.RBRACE) {
-            throw new IllegalStateException("error msg");
-        }
+        if (S.currentTok() != Fun.RBRACE) errorMsg("}", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
-
-
         return parseTree;
     }
 
-    public ParseTree parseCond(ParseTree root) throws IOException {
+    private ParseTree parseCond(ParseTree root) throws IOException {
         ParseTree parseTree = root;
 
         if (S.currentTok() == Fun.NEGATION) {
             parseTree.add(new ParseTree(NodeType.NEGATION));
             S.nextTok();
 
-            if (S.currentTok() != Fun.LPAREN) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.LPAREN) errorMsg("(", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.LPAREN));
             S.nextTok();
 
             parseTree.add(parseCond(new ParseTree(NodeType.COND)));
 
-            if (S.currentTok() != Fun.RPAREN) {
-                throw new IllegalStateException("error msg");
-            } 
+            if (S.currentTok() != Fun.RPAREN) errorMsg(")", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.RPAREN));
             S.nextTok();
@@ -411,32 +364,26 @@ public class Parser {
         return parseTree;
     }
 
-    public ParseTree parseOut(ParseTree root) throws IOException {
+    private ParseTree parseOut(ParseTree root) throws IOException {
         ParseTree parseTree = root;
 
         if (S.currentTok() == Fun.WRITE) {
             parseTree.add(new ParseTree(NodeType.WRITE));
             S.nextTok();
     
-            if (S.currentTok() != Fun.LPAREN) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.LPAREN) errorMsg("(", S.currentTok().toString());
     
             parseTree.add(new ParseTree(NodeType.LPAREN));
             S.nextTok();
     
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
     
-            if (S.currentTok() != Fun.RPAREN) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.RPAREN) errorMsg(")", S.currentTok().toString());
     
             parseTree.add(new ParseTree(NodeType.RPAREN));
             S.nextTok();
     
-            if (S.currentTok() != Fun.SEMICOLON) {
-                throw new IllegalStateException("; expected but not found. ");
-            }
+            if (S.currentTok() != Fun.SEMICOLON) errorMsg(";", S.currentTok().toString());
     
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
             S.nextTok();
@@ -447,7 +394,7 @@ public class Parser {
         }
     }
 
-    public ParseTree parseCompr(ParseTree root) throws IOException {
+    private ParseTree parseCompr(ParseTree root) throws IOException {
         ParseTree parseTree = root;
         parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
@@ -467,13 +414,13 @@ public class Parser {
 
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else {
-            throw new IllegalStateException(S.currentTok() + " in an unexpected place. ");
+            errorMsg(S.currentTok().toString());
         }
 
         return parseTree;
     }
 
-    public ParseTree parseFactor(ParseTree root) throws IOException {
+    private ParseTree parseFactor(ParseTree root) throws IOException {
         ParseTree parseTree = root;
 
         if (S.currentTok() == Fun.ID) {
@@ -488,9 +435,7 @@ public class Parser {
 
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
-            if (S.currentTok() != Fun.RPAREN) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.RPAREN) errorMsg(")", S.currentTok().toString());
 
             parseTree.add(new ParseTree(NodeType.RPAREN));
             S.nextTok();
@@ -498,22 +443,17 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.READ));
             S.nextTok();
 
-            if (S.currentTok() != Fun.LPAREN) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.LPAREN) errorMsg("(", S.currentTok().toString());
 
             S.nextTok();
 
-            if (S.currentTok() != Fun.RPAREN) {
-                throw new IllegalStateException("error msg");
-            }
+            if (S.currentTok() != Fun.RPAREN) errorMsg(")", S.currentTok().toString());
 
             S.nextTok();
         } else {
-            throw new IllegalStateException(prev + " is in an unexpected place. ");
+            errorMsg(prev.toString());
         }
 
         return parseTree;
     }   
-
 }

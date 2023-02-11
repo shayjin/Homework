@@ -2,23 +2,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParseTree {
-
     private NodeType type;
     private String value;
     private List<ParseTree> children;
+
+    private final int SPACE = 1;
+    private final int OFFSET = 4;
     private static int indent = 0;
-    private static int space = 1;
-    private final int offset = 4;
-    private static boolean start = true;
-    private static NodeType prev;
-    private static String prevVal;
-
-    static String tempVar = "";
-
-    private static String recent = "";
 
     private static List<List<String>> variables = new ArrayList<List<String>>();
     private static List<List<String>> references = new ArrayList<List<String>>();
+    private static String tempVar = "";
+    private static String recent = "";
+    private static NodeType prev;
+    private static String prevVal;
+    private static boolean start = true;
 
     public ParseTree() {
         this.children = new ArrayList<ParseTree>();
@@ -40,24 +38,35 @@ public class ParseTree {
     }
 
     public void add(ParseTree parseTree) {
-        if (parseTree.type != null) {
-            children.add(parseTree);
+        if (parseTree.type != null) children.add(parseTree);
+    }
+
+    public void printSpaces(int SPACE) {
+        for (int i = 0; i < SPACE; i++) {
+            System.out.print(" ");
         }
+    }
+
+    private void duplicateErrorMsg(String found) {
+        System.out.println("\nERROR: Duplicate variables '" + found + "' found. ");
+        System.exit(-1);
+    }
+
+    private void intError(String msg) {
+        System.out.println("\nERROR: " + msg);
+        System.exit(-1);
     }
 
     public void prettyPrint() {
         if (this.children.size() == 0) {
             if (start) {
-                if (prev == NodeType.RBRACE && this.type != NodeType.ELSE) {
-                    System.out.println();
-                } 
+                if (prev == NodeType.RBRACE && this.type != NodeType.ELSE) System.out.println();
 
-                if (this.type == NodeType.RBRACE) {
-                    indent -= offset;
-                } 
+                if (this.type == NodeType.RBRACE) indent -= OFFSET;
 
-                if (this.type == NodeType.ELSE) printSpaces(space);
+                if (this.type == NodeType.ELSE) printSpaces(SPACE);
                 else printSpaces(indent);
+
                 start = false;
             } else {
                 if (
@@ -66,13 +75,13 @@ public class ParseTree {
                     this.type != NodeType.LPAREN &&
                     this.type != NodeType.COMMA &&
                     prev != NodeType.LPAREN
-                ) printSpaces(space);
+                ) printSpaces(SPACE);
             }
 
             printToken(this.type, this.value);
 
             if (this.type == NodeType.LBRACE) {
-                indent += offset;
+                indent += OFFSET;
                 System.out.println();
                 start = true;
             } else if (this.type == NodeType.SEMICOLON) {
@@ -128,8 +137,8 @@ public class ParseTree {
                 List<String> temp = references.get(references.size() - 1);
 
                 if (variables.get(variables.size() - 1).contains(token)) {
-                    throw new IllegalStateException("duplicate variables");
-                }
+                    duplicateErrorMsg(token);
+                }    
     
                 temp.add(token);
 
@@ -138,7 +147,7 @@ public class ParseTree {
                 List<String> temp = variables.get(variables.size() - 1);
 
                 if (variables.get(variables.size() - 1).contains(token)) {
-                    throw new IllegalStateException("duplicate variables");
+                    duplicateErrorMsg(token);
                 }
     
                 temp.add(token);
@@ -146,12 +155,11 @@ public class ParseTree {
                 variables.set(variables.size() - 1, temp);
             }
 
-
         } else if (prev == NodeType.INT) {
             List<String> temp = variables.get(variables.size() - 1);
 
             if (variables.get(variables.size() - 1).contains(token)) {
-                throw new IllegalStateException("duplicate variables");
+                duplicateErrorMsg(token);
             }
 
             temp.add(token);
@@ -161,7 +169,7 @@ public class ParseTree {
             List<String> temp = references.get(references.size() - 1);
 
             if (references.get(references.size() - 1).contains(token)) {
-                throw new IllegalStateException("duplicate variables");
+                duplicateErrorMsg(token);
             }
 
             temp.add(token);
@@ -172,7 +180,7 @@ public class ParseTree {
             variables.remove(variables.size() - 1);
         } else if (type == NodeType.ASSIGN) {
             tempVar = prevVal;
-        } else if (type == NodeType.SHARE) {
+        } else if (type == NodeType.SHARE || type == NodeType.NEW) {
             boolean contains = false;
 
             for (List<String> scope : references) {
@@ -182,7 +190,12 @@ public class ParseTree {
             }
 
             if (!contains) {
-                throw new IllegalStateException("int variable " + tempVar + " used in 'id = share id' assignment");
+                String expr;
+
+                if (type == NodeType.SHARE) expr = "'id = share id'";
+                else expr = "'id = new inst'";
+
+                intError("An int variable '" + tempVar + "' used in " + expr + " assignment. ");
             }
         } else if (type == NodeType.ID) {
             boolean contains = false;
@@ -200,21 +213,13 @@ public class ParseTree {
                 }
             }
 
-            if (!contains && !contains2) {
-                throw new IllegalStateException(token + " is an undeclared varialble. ");
-            }
+            if (!contains && !contains2) duplicateErrorMsg("An undeclared variable '" + token + "' found. ");
 
             if (prev == NodeType.SHARE) {
                 if (!contains2) {
-                    throw new IllegalStateException("int variable used in 'id = share id' assignment");
+                    intError("An int variable used in 'id = share id' assignment. ");
                 }
             }
-        }
-    }
-
-    public void printSpaces(int space) {
-        for (int i = 0; i < space; i++) {
-            System.out.print(" ");
         }
     }
 } 
