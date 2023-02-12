@@ -42,9 +42,7 @@ public class ParseTree {
     }
 
     public void printSpaces(int SPACE) {
-        for (int i = 0; i < SPACE; i++) {
-            System.out.print(" ");
-        }
+        for (int i = 0; i < SPACE; i++) System.out.print(" ");
     }
 
     private void duplicateErrorMsg(String found) {
