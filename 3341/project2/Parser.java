@@ -27,7 +27,6 @@ public class Parser {
 
         if (S.currentTok() != Fun.PROGRAM) errorMsg("program", S.currentTok().toString());
         
-
         parseTree.add(new ParseTree(NodeType.PROGRAM));
         S.nextTok();
 
@@ -54,15 +53,12 @@ public class Parser {
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
-
         if (S.currentTok() != Fun.RBRACE) errorMsg("}", S.currentTok().toString());
 
         parseTree.add(new ParseTree(NodeType.RBRACE));
         S.nextTok();
 
-        if (S.currentTok() != Fun.EOS) {
-            errorMsg(S.currentTok().toString());
-        }
+        if (S.currentTok() != Fun.EOS) errorMsg(S.currentTok().toString());
 
         return parseTree;
     }
@@ -122,9 +118,7 @@ public class Parser {
     }
 
     private ParseTree parseDeclRef(ParseTree root) throws IOException {
-        if (S.currentTok() != Fun.REF) {
-            return new ParseTree();
-        }
+        if (S.currentTok() != Fun.REF) return new ParseTree();
 
         ParseTree parseTree = root;
         parseTree.add(new ParseTree(NodeType.REF));
@@ -156,20 +150,18 @@ public class Parser {
 
     private ParseTree parseStmt(ParseTree root) throws IOException {
         ParseTree parseTree = root;
+
         parseTree.add(parseAssign(new ParseTree(NodeType.ASSIGN)));
         parseTree.add(parseIf(new ParseTree(NodeType.IF)));
         parseTree.add(parseLoop(new ParseTree(NodeType.LOOP)));
         parseTree.add(parseOut(new ParseTree(NodeType.OUT)));
-
         parseTree.add(parseDecl(new ParseTree(NodeType.DECL)));
 
         return parseTree;
     }
 
     private ParseTree parseAssign(ParseTree root) throws IOException {
-        if (S.currentTok() != Fun.ID) {
-            return new ParseTree();
-        }
+        if (S.currentTok() != Fun.ID) return new ParseTree();
 
         ParseTree parseTree = root;
         parseTree.add(new ParseTree(NodeType.ID, S.getID()));
@@ -193,8 +185,6 @@ public class Parser {
 
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
             S.nextTok();
-
-            return parseTree;
         } else if (S.currentTok() == Fun.SHARE) {
             parseTree.add(new ParseTree(NodeType.SHARE));
             S.nextTok();
@@ -208,8 +198,6 @@ public class Parser {
 
             parseTree.add(new ParseTree(NodeType.SEMICOLON));
             S.nextTok();
-
-            return parseTree;
         } else {
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
@@ -229,13 +217,11 @@ public class Parser {
         if (S.currentTok() == Fun.ADD) {
             parseTree.add(new ParseTree(NodeType.ADD));
             S.nextTok();
-
             prev = NodeType.ADD;
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else if (S.currentTok() == Fun.SUB) {
             parseTree.add(new ParseTree(NodeType.SUB));
             S.nextTok();
-
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } 
 
@@ -249,7 +235,6 @@ public class Parser {
         if (S.currentTok() == Fun.MULT) {
             parseTree.add(new ParseTree(NodeType.MULT));
             S.nextTok();
-
             parseTree.add(parseTerm(new ParseTree(NodeType.TERM)));
         }
 
@@ -257,15 +242,11 @@ public class Parser {
     }
 
     private ParseTree parseIf(ParseTree root) throws IOException {
-        if (S.currentTok() != Fun.IF) {
-            return new ParseTree();
-        }
+        if (S.currentTok() != Fun.IF) return new ParseTree();
 
         ParseTree parseTree = root;
-
         parseTree.add(new ParseTree(NodeType.IF));
         S.nextTok();
-
         parseTree.add(parseCond(new ParseTree(NodeType.COND)));
 
         if (S.currentTok() != Fun.THEN) errorMsg("then", S.currentTok().toString());
@@ -306,9 +287,7 @@ public class Parser {
     }
 
     private ParseTree parseLoop(ParseTree root) throws IOException {
-        if (S.currentTok() != Fun.WHILE) {
-            return new ParseTree();
-        }
+        if (S.currentTok() != Fun.WHILE) return new ParseTree();
 
         ParseTree parseTree = root;
 
@@ -351,12 +330,11 @@ public class Parser {
             parseTree.add(new ParseTree(NodeType.RPAREN));
             S.nextTok();
         } else {
-            parseTree.add(parseCompr(new ParseTree(NodeType.COMPR)));
+            parseTree.add(parseCompr(new ParseTree(NodeType.CMPR)));
 
             if (S.currentTok() == Fun.OR) {
                 parseTree.add(new ParseTree(NodeType.OR));
                 S.nextTok();
-    
                 parseTree.add(parseCond(new ParseTree(NodeType.COND)));
             } 
         }
@@ -401,17 +379,14 @@ public class Parser {
         if (S.currentTok() == Fun.EQUAL) {
             parseTree.add(new ParseTree(NodeType.EQUAL));
             S.nextTok();
-
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else if (S.currentTok() == Fun.LESS) {
             parseTree.add(new ParseTree(NodeType.LESS));
             S.nextTok();
-
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else if (S.currentTok() == Fun.LESSEQUAL) {
             parseTree.add(new ParseTree(NodeType.LESSEQUAL));
             S.nextTok();
-
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
         } else {
             errorMsg(S.currentTok().toString());
@@ -432,7 +407,6 @@ public class Parser {
         } else if (S.currentTok() == Fun.LPAREN) {
             parseTree.add(new ParseTree(NodeType.LPAREN));
             S.nextTok();
-
             parseTree.add(parseExpr(new ParseTree(NodeType.EXPR)));
 
             if (S.currentTok() != Fun.RPAREN) errorMsg(")", S.currentTok().toString());

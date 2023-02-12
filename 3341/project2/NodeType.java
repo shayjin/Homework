@@ -10,7 +10,7 @@ enum NodeType {
 	FACTOR,
 	TERM,
 	COND,
-	COMPR,
+	CMPR,
 	LOOP,
 	OUT,
     PROGRAM,
