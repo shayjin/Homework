@@ -61,7 +61,7 @@ In this homework, you are to implement principal component analysis (PCA) for di
 
 # Question 0: Exercise
 
-* You will use [NumPy] (https://numpy.org/) extensively in this homework. NumPy a library for the Python programming language, adding support for large, multi-dimensional arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays. NumPy has many great functions and operations that will make your implementation much easier.
+* You will use [NumPy] (https://numpy.org/) extensively in this homework. NumPy is a library for the Python programming language, adding support for large, multi-dimensional arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays. NumPy has many great functions and operations that will make your implementation much easier.
 
 * If you are not familiar with Numpy, we recommend that you read this [tutorial] (https://cs231n.github.io/python-numpy-tutorial/) or some other tutorials online, and then play with some code to get familiar with it.
 
