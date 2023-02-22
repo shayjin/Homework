@@ -144,6 +144,7 @@ def linear_regression(X, Y):
     b = mat[-1]
 
     ### Your job ends here ###
+    
     return w, b
 
 def polynomial_transform(X, degree_polynomial):
