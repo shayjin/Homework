@@ -136,12 +136,15 @@ def linear_regression(X, Y):
     tilde_X = np.concatenate((X, np.ones((1, N))), 0) # add 1 to the end of each data instance
 
     ### Your job starts here ###
+    tildeX_tildeXInv = np.linalg.inv(np.matmul(tilde_X, tilde_X.transpose()))
+    tildeX_Y = np.matmul(tilde_X, Y)
+    mat = np.matmul(tildeX_tildeXInv, tildeX_Y)
 
-
+    w = mat[0:-1]
+    b = mat[-1]
 
     ### Your job ends here ###
     return w, b
-
 
 def polynomial_transform(X, degree_polynomial):
     """
