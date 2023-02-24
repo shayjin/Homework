@@ -1,0 +1,7 @@
+program {
+	reference x;
+begin {
+	x = new inst;
+	x = 10;
+	write(x);
+}}

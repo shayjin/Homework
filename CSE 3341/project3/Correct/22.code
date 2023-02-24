@@ -1,0 +1,15 @@
+program {
+	reference x, y, z;
+	int a, b, c;
+begin {
+	x = new inst;
+	y = new inst;
+	x = 5;
+	y = 10;
+	if x < y then {
+		while (0 - 10) < x {
+			x = x - 1;
+		}
+	}
+	write(x);
+}}

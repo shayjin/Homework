@@ -1,0 +1,15 @@
+program {
+	reference x;
+begin {
+	x = new inst;
+	x = 4;
+	reference y;
+	y = share x;
+	while !(x==0) {
+		reference z;
+		z = new inst;
+		z = x;
+		x = z-1;
+	}
+	write(y);
+}}

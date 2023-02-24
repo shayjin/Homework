@@ -1,0 +1,18 @@
+program {
+begin {
+	reference x, y, z;
+	x = new inst;
+	y = share x;
+	z = share y;
+	x = 10;
+	while !(z==0) {
+		x = x-1;
+		reference y;
+		y = new inst;
+		y = 1;
+		while !(y==64) {
+			y = 2*y;
+			write(y);
+		}
+	}
+}}

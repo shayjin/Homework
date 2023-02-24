@@ -1,0 +1,6 @@
+program {
+	int x, y, z;
+begin {
+	x=read();
+	write(4);
+}}

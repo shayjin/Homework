@@ -1,0 +1,10 @@
+program {
+	int x;
+begin {
+	x=read();
+	if x==x then {
+		int x;
+		x=99;
+	}
+	write(x);
+}}

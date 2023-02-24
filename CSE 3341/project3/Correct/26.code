@@ -1,0 +1,12 @@
+program {
+	reference x;
+	int n;
+begin {
+	x = new inst;
+	x = 4;
+	while !(x==0) {
+		n = read();
+		x = x-1;
+		write(n);
+	}
+}}

@@ -1,0 +1,18 @@
+program {
+	reference x, y, z;
+begin {
+	x = new inst;
+	y = new inst;
+	x = 5;
+	y = 10;
+	while !(x==y) {
+		if x <= y then {
+			x = x + 2;
+		}
+		if !(x < y) then {
+			y = y+1;
+		}
+	}
+	write(x);
+	write(y);
+}}
