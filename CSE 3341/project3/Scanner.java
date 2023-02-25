@@ -1,177 +1,249 @@
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 class Scanner {
-	public BufferedReader reader;
-	private Fun currToken;
-	private String idVal;
-	private int constVal;
-	private final String SYMBOLS = ";(),=!<+-*{}";
+    final String id = "[a-zA-Z][a-zA-Z0-9]*";
+    final String constant = "[0-9]|[1-9][0-9]*";
+    BufferedReader in;
+    StringBuilder charSequence;
+    Fun token;
+
+    // Initialize the scanner
+    Scanner(String filename) {
+        try {
+            this.in = new BufferedReader(new FileReader(filename));
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: File not found");
+        }
+        this.nextTok();
+    }
+
+    // Advance to the next token
+    public void nextTok() {
+        try {
+			// Skip white space
+			int character = this.skipWhiteSpace();
+			
+            // End of stream?
+            if (character == -1) {
+                this.token = Fun.EOS;
+            } 
+			else 
+			{
+				switch ((char) character) {
+                    // Single character special symbols
+                    case ';':
+                        this.token = Fun.SEMICOLON;
+                        break;
+
+                    case '(':
+                        this.token = Fun.LPAREN;
+                        break;
+
+                    case ')':
+                        this.token = Fun.RPAREN;
+                        break;
+
+                    case ',':
+                        this.token = Fun.COMMA;
+                        break;
+						
+					case '}':
+                        this.token = Fun.RBRACE;
+                        break;
+
+                    case '{':
+                        this.token = Fun.LBRACE;
+                        break;
+						
+					case '!':
+                        this.token = Fun.NEGATION;
+                        break;
+
+                    case '+':
+                        this.token = Fun.ADD;
+                        break;
+
+                    case '-':
+                        this.token = Fun.SUB;
+                        break;
+
+                    case '*':
+                        this.token = Fun.MULT;
+                        break;
+
+                    // Special symbols with one or more characters
+                    case '=': {
+                        this.in.mark(1);
+                        if ((char) this.in.read() == '=') {
+                            this.token = Fun.EQUAL;
+                        } else {
+                            this.in.reset();
+                            this.token = Fun.ASSIGN;
+                        }
+                        break;
+                    }
+
+                    case '<': {
+                        this.in.mark(1);
+                        if ((char) this.in.read() == '=') {
+                            this.token = Fun.LESSEQUAL;
+                        } else {
+                            this.in.reset();
+                            this.token = Fun.LESS;
+                        }
+                        break;
+                    }
+					// ID, CONST, or keyword
+                    default: {
+						this.matchLongToken(character);
+                    }
+                }
+            }
+        }
+		catch (IOException e) {
+            System.out.println("ERROR: Reading program file");
+            this.token = Fun.ERROR;
+        }
+		catch (RuntimeException e) {
+            System.out.println("ERROR: Invalid input " + this.charSequence.toString());
+            this.token = Fun.ERROR;
+        }
+    }
+
+    // Return the current token
+    public Fun currentTok() {
+        return this.token;
+    }
+
+    public String getID() {
+        return this.charSequence.toString();
+    }
+
+    public int getCONST() {
+        return Integer.parseInt(this.charSequence.toString());
+    }
 	
-	// Constructor should open the file and find the first token
-	Scanner(String filename) throws IOException {
-		reader = new BufferedReader(new FileReader(filename));
-		nextTok();
+	// Helper methods
+	private int skipWhiteSpace() throws IOException {
+		int character = this.in.read();
+		while (Character.isWhitespace(character) && character != -1) {
+			character = this.in.read();
+		}
+		return character;
 	}
-
-	// nextTok should advance the scanner to the next token
-	public void nextTok() throws IOException {
-		int charInt = reader.read();
-		char token = (char) charInt;
-		
-		while (Character.isWhitespace(token)) {
-			charInt = reader.read();
-			token = (char) charInt;
-		} 
-
-		String varToken = Character.toString(token);
-
-		if (charInt == -1) {
-			this.currToken = Fun.EOS;
-		} else {
-			switch (varToken) {
-				case ";": currToken = Fun.SEMICOLON; break;
-				case "(": currToken = Fun.LPAREN; break;
-				case ")": currToken = Fun.RPAREN; break;
-				case ",": currToken = Fun.COMMA; break;
-				case "=": {
-					reader.mark(1);
-					token = (char) reader.read();
 	
-					if (token == '=') {
-						currToken = Fun.EQUAL; 
-					} else {
-						currToken = Fun.ASSIGN; 
-						reader.reset();
-					}
-	
-					break;
+	// ID, CONST, or keyword
+	private void matchLongToken(int character) throws IOException, RuntimeException {
+		this.charSequence = new StringBuilder();
+		// First character is a digit? Stop at something non-digit
+		if (Character.isDigit((char) character)) {
+			do {
+				this.charSequence.append((char) character);
+				this.in.mark(1);
+				character = this.in.read();								
+			} while (character != -1 && Character.isDigit((char) character));
+			this.in.reset();
+		}
+		// First character is a letter? Stop at something non-letter and non-digit
+		else if (Character.isLetter((char) character)) {
+			do {
+				this.charSequence.append((char) character);
+				this.in.mark(1);
+				character = this.in.read();								
+			} while (character != -1 && Character.isLetterOrDigit((char) character));
+			this.in.reset();
+		}
+		// First character is not a letter, digit, or any special symbol? Stop reading
+		else {
+			this.charSequence.append((char) character);
+		}
+
+		switch (this.charSequence.toString()) {
+			// Keywords
+			case "program":
+				this.token = Fun.PROGRAM;
+				break;
+
+			case "begin":
+				this.token = Fun.BEGIN;
+				break;
+
+			case "end":
+				this.token = Fun.END;
+				break;
+				
+			case "new":
+				this.token = Fun.NEW;
+				break;
+				
+			case "int":
+				this.token = Fun.INT;
+				break;
+				
+			case "reference":
+				this.token = Fun.REF;
+				break;
+			
+			case "inst":
+				this.token = Fun.INSTANCE;
+				break;
+
+			case "if":
+				this.token = Fun.IF;
+				break;
+
+			case "then":
+				this.token = Fun.THEN;
+				break;
+
+			case "else":
+				this.token = Fun.ELSE;
+				break;
+
+			case "while":
+				this.token = Fun.WHILE;
+				break;
+
+			case "or":
+				this.token = Fun.OR;
+				break;
+				
+			case "and":
+				this.token = Fun.AND;
+				break;
+
+			case "read":
+				this.token = Fun.READ;
+				break;
+
+			case "write":
+				this.token = Fun.WRITE;
+				break;
+				
+			case "share":
+				this.token = Fun.SHARE;
+				break;
+
+			default: {
+				// Identifier
+				if (this.charSequence.toString().matches(this.id)) {
+					this.token = Fun.ID;
+
 				}
-				case "!": currToken = Fun.NEGATION; break; 
-				case "<": {
-					reader.mark(1);
-					token = (char) reader.read();
-	
-					if (token == '=') {
-						currToken = Fun.LESSEQUAL; 
-					} else {
-						currToken = Fun.LESS; 
-						reader.reset();
-					}
-	
-					break;
+				// Constant less than 256
+				else if (this.charSequence.toString().matches(this.constant) && 
+						 Integer.parseInt(this.charSequence.toString()) < 256) {
+					this.token = Fun.CONST;
 				}
-				case "+": currToken = Fun.ADD; break;
-				case "-": currToken = Fun.SUB; break;
-				case "*": currToken = Fun.MULT; break;
-				case "{": currToken = Fun.LBRACE; break;
-				case "}": currToken = Fun.RBRACE; break;
-				default: {
-					// Number Case
-					if (Character.isDigit(token)) {
-						reader.mark(1);
-						token = (char) reader.read();
-
-						while (Character.isDigit(token) && charInt != -1) {
-							varToken += token;
-							reader.mark(1);
-							charInt = reader.read();
-
-							if (charInt != -1) {
-								token = (char) charInt;
-							}
-						}
-						
-						try {
-							currToken = Fun.CONST;
-							this.constVal = Integer.parseInt(varToken);
-
-							if (this.constVal > 255) {
-								throw new NumberFormatException();
-							}
-
-							reader.reset();
-						} catch (NumberFormatException err){
-							currToken = Fun.ERROR;
-							System.out.println("ERROR: Constant " + varToken + " is too large. ");
-						}
-					} else if (Character.isAlphabetic(token)) {
-						reader.mark(1);
-						charInt = reader.read();
-						token = (char) charInt;
-
-						boolean assigned = true;
-		
-						while (!Character.isWhitespace(token) && !SYMBOLS.contains(token + "") && 
-								(Character.isAlphabetic(token) || Character.isDigit(token)) && charInt != -1) {
-							varToken += token;
-
-							reader.mark(1);
-							charInt = reader.read();
-
-							if (charInt == -1) {
-								break;
-							}
-							
-							token = (char) charInt;
-						}
-
-						switch (varToken) {
-							case "program": currToken = Fun.PROGRAM; break;
-							case "begin": currToken = Fun.BEGIN; break;
-							case "end": currToken = Fun.END; break;
-							case "new": currToken = Fun.NEW; break;
-							case "int": currToken = Fun.INT; break;
-							case "reference": currToken = Fun.REF; break;
-							case "inst": currToken = Fun.INSTANCE; break;
-							case "if": currToken = Fun.IF; break;
-							case "then": currToken = Fun.THEN; break;
-							case "else": currToken = Fun.ELSE; break;
-							case "while": currToken = Fun.WHILE; break;
-							case "or": currToken = Fun.OR; break;
-							case "and": currToken = Fun.AND; break;
-							case "read": currToken = Fun.READ; break;
-							case "write": currToken = Fun.WRITE; break;
-							case "share": currToken = Fun.SHARE; break;
-							default: assigned = false; break;
-						}
-						
-						if (SYMBOLS.contains(token + "") || !(Character.isAlphabetic(token) || Character.isDigit(token))) {
-							reader.reset();
-						}
-
-						// ID
-						if (!assigned) {
-							currToken = Fun.ID;
-							this.idVal = varToken;
-						} else {
-							reader.reset();
-						}
-					} else {
-						currToken = Fun.ERROR;
-						System.out.println("ERROR: " + token + " is not a valid input. ");
-					}
+				// All invalid input including invalid symbols, leading zeros, 
+				// identifier with digit 0, constant greater than 255 and etc.
+				else {
+					throw new RuntimeException();
 				}
 			}
-		}
+		}		
 	}
-
-	// currentTok should return the current token
-	public Fun currentTok() {
-		return this.currToken;
-	}
-
-	// If the current token is ID, return the string value of the identifier
-	// Otherwise, return value does not matter
-	public String getID() {
-		return this.idVal;
-	}
-
-	// If the current token is CONST, return the numerical value of the constant
-	// Otherwise, return value does not matter
-	public int getCONST() {
-		return this.constVal;
-	}
-
 }
