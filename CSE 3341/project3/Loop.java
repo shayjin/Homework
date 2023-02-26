@@ -38,8 +38,10 @@ class Loop implements Stmt {
 	}
 
 	public void execute() {
+		Interpretor.addContext();
 		while (cond.execute()) {
 			ss.execute();
 		}
+		Interpretor.deleteContext();
 	}
 }
