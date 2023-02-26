@@ -37,12 +37,8 @@ class Expr {
 	}
 
 	int execute() {
-		if (option == 1) {
-			return term.execute() + expr.execute();
-		} else if (option == 2) {
-			return term.execute() - expr.execute();
-		} else {
-			return term.execute();
-		}
+		if (option == 1) return term.execute() + expr.execute();
+		else if (option == 2) return term.execute() - expr.execute();
+		else return term.execute();
 	}
 }

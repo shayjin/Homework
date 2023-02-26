@@ -13,7 +13,7 @@ public class Interpretor {
 
 
     static void init() {
-        global =new HashMap<>();
+        global = new HashMap<>();
         stack = new Stack<>();
         heap = new ArrayList<>();
         shared = new HashMap<>();
@@ -49,9 +49,7 @@ public class Interpretor {
     public static void allocateOnHeap(String name) {
         boolean contains = false;
         
-        if (shared.containsKey(name)) {
-            shared.remove(name);
-        }
+        if (shared.containsKey(name)) shared.remove(name);
 
         for (int i = 0; i < stack.size() - 1 ; i++) {
             if (stack.get(i).containsKey(name)) {
@@ -89,16 +87,12 @@ public class Interpretor {
                 }
             }
     
-            if (global.containsKey(name)) {
-                global.replace(name, value);
-            }
+            if (global.containsKey(name)) global.replace(name, value);
         }
     }
 
     public static int search(String name) {
-        if (shared.containsKey(name)) {
-            return search(shared.get(name));
-        }
+        if (shared.containsKey(name)) return search(shared.get(name));
 
         for (int i = stack.size() - 1; i >= 0 ; i--) {
             if (stack.get(i).containsKey(name)) {
@@ -107,7 +101,6 @@ public class Interpretor {
         }
 
         if (global.containsKey(name)) return global.get(name);
-
 
         return 0;
     }

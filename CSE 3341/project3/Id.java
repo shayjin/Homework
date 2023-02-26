@@ -1,5 +1,3 @@
-import java.net.IDN;
-
 class Id {
 	String identifier;
 	
@@ -67,5 +65,4 @@ class Id {
 	int returnId() {
 		return Interpretor.search(identifier);
 	}
-
 }

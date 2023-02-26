@@ -46,7 +46,6 @@ class IdList {
 
 	void executeRef() {
 		id.allocateRef();
-
 		if (list != null) list.executeRef();
 	}
 }

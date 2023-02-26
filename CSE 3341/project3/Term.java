@@ -28,10 +28,7 @@ class Term {
 	}
 
 	int execute() {
-		if (term != null) {
-			return factor.execute() * term.execute();
-		} else {
-			return factor.execute();
-		}
+		if (term != null) return factor.execute() * term.execute();
+		else return factor.execute();
 	}
 }

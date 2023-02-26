@@ -54,18 +54,23 @@ class Factor {
 
 	int execute() {
 
-		if (id != null) return id.returnId();
-		else if (expr != null) return expr.execute();
-		else if (input != null && input) {
+		if (id != null) {
+			return id.returnId();
+		} else if (expr != null) {
+			return expr.execute();
+		} else if (input != null && input) {
 			int value = Interpretor.scanner.getCONST();
 			Interpretor.scanner.nextTok();
+
 			if (Interpretor.scanner.currentTok() == Fun.EOS) {
 				System.out.println("input error");
 				System.exit(-1);
 				return 0;
 			}
+
 			return value;
+		} else {
+			return constant;
 		}
-		else return constant;
 	}
 }
