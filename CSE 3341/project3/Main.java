@@ -4,14 +4,13 @@ class Main {
 		Scanner s = new Scanner(args[0]);
 		Scanner input = new Scanner(args[1]);
 		Parser.scanner = s;
-		Executor.scanner = input;
+		Interpretor.scanner = input;
 		
 		Program prog = new Program();
 		
 		prog.parse();
 		
 		prog.semantic();
-		
 
 		prog.execute();
 	}

@@ -49,7 +49,7 @@ class Program {
 	}
 
 	void execute() {
-		Executor.init();
+		Interpretor.init();
 		if (ds != null) ds.execute();
 		ss.execute();
 	}

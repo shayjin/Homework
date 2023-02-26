@@ -57,9 +57,9 @@ class Factor {
 		if (id != null) return id.returnId();
 		else if (expr != null) return expr.execute();
 		else if (input != null && input) {
-			int value = Executor.scanner.getCONST();
-			Executor.scanner.nextTok();
-			if (Executor.scanner.currentTok() == Fun.EOS) {
+			int value = Interpretor.scanner.getCONST();
+			Interpretor.scanner.nextTok();
+			if (Interpretor.scanner.currentTok() == Fun.EOS) {
 				System.out.println("input error");
 				System.exit(-1);
 				return 0;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-public class Executor {
+public class Interpretor {
     public static Map<String, Integer> global;       
     public static Stack<Map<String, Integer>> stack;  
     static List<String> heap; 

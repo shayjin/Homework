@@ -40,32 +40,32 @@ class Id {
 	}
 
 	void allocateId() {
-		Executor.allocate(identifier, 0);
-		Executor.allocateOnHeap(identifier);
+		Interpretor.allocate(identifier, 0);
+		Interpretor.allocateOnHeap(identifier);
 	}
 
 	void allocateRef() {
-		Executor.allocate(identifier, 0);
+		Interpretor.allocate(identifier, 0);
 	}
 
 	void assignRef() {
-		Executor.allocateOnHeap(identifier);
+		Interpretor.allocateOnHeap(identifier);
 	}
 
 	void assignShare(Id val) {
-		Executor.allocateShare(identifier, val.identifier); 
+		Interpretor.allocateShare(identifier, val.identifier); 
 	}
 
 	void assignExpr(Expr expr) {
-		Executor.assign(identifier, expr.execute());
+		Interpretor.assign(identifier, expr.execute());
 	}
 
 	void allocateOnHeap() {
-		Executor.allocateOnHeap(identifier);
+		Interpretor.allocateOnHeap(identifier);
 	}
 
 	int returnId() {
-		return Executor.search(identifier);
+		return Interpretor.search(identifier);
 	}
 
 }

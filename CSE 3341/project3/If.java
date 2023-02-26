@@ -64,13 +64,13 @@ class If implements Stmt {
 	public void execute() {
 
 		if (cond.execute()) {
-			Executor.addContext();
+			Interpretor.addContext();
 			ss1.execute();
-			Executor.deleteContext();
+			Interpretor.deleteContext();
 		} else if (ss2 != null) {
-			Executor.addContext();
+			Interpretor.addContext();
 			ss2.execute();
-			Executor.deleteContext();
+			Interpretor.deleteContext();
 		}
 	}	
 }
