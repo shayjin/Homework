@@ -59,6 +59,11 @@ class Factor {
 		else if (input != null && input) {
 			int value = Executor.scanner.getCONST();
 			Executor.scanner.nextTok();
+			if (Executor.scanner.currentTok() == Fun.EOS) {
+				System.out.println("input error");
+				System.exit(-1);
+				return 0;
+			}
 			return value;
 		}
 		else return constant;

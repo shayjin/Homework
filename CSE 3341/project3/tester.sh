@@ -37,20 +37,30 @@ rm temp2
 echo "Running error cases:"
 echo ""
 echo "Running 01.error:"
-${runner} Error/01.code Error/01.data
+
+printf "Your error message -> " 
+${runner} Error/01.code Error/01.data | tail -n1
+echo ""
+
 read -n 1 -p "Error is .data file not having enough values. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
 	error=$(($error + 1))
 fi
 echo ""
 echo "Running 02.error:"
-${runner} Error/02.code Error/02.data
+
+printf "Your error message -> " 
+${runner} Error/02.code Error/02.data | tail -n1
+echo ""
+
 read -n 1 -p "Error is assignment to null ref variable. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
 	error=$(($error + 1))
 fi
 
 echo ""
+echo ""
+
 echo "Correct cases score out of 30:"
 echo $score
 echo "Error cases score out of 2:"
