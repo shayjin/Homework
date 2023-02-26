@@ -62,6 +62,15 @@ class If implements Stmt {
 	}
 
 	public void execute() {
-		
-	}
+
+		if (cond.execute()) {
+			Executor.addContext();
+			ss1.execute();
+			Executor.deleteContext();
+		} else if (ss2 != null) {
+			Executor.addContext();
+			ss2.execute();
+			Executor.deleteContext();
+		}
+	}	
 }

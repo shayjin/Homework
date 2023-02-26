@@ -41,4 +41,14 @@ class Cmpr {
 		}
 		expr2.print();
 	}
+
+	boolean execute() {
+
+		if (option == 0) {
+			return expr1.execute() == expr2.execute();
+		}
+		else if (option == 1) return expr1.execute() < expr2.execute();
+		else if (option == 2) return expr1.execute() <= expr2.execute();
+		return false;
+	}
 }

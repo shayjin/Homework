@@ -38,6 +38,8 @@ class Loop implements Stmt {
 	}
 
 	public void execute() {
-		
+		while (cond.execute()) {
+			ss.execute();
+		}
 	}
 }

@@ -53,9 +53,14 @@ class Factor {
 	}
 
 	int execute() {
+
 		if (id != null) return id.returnId();
 		else if (expr != null) return expr.execute();
-		else if (input != null && input) return 0; // read input later (푸하하)
+		else if (input != null && input) {
+			int value = Executor.scanner.getCONST();
+			Executor.scanner.nextTok();
+			return value;
+		}
 		else return constant;
 	}
 }

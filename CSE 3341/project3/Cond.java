@@ -46,4 +46,10 @@ class Cond {
 			}
 		}
 	}
+
+	boolean execute() {
+		if (cmpr != null && cond != null) return cmpr.execute() || cond.execute(); 
+		else if (cmpr != null) return cmpr.execute();
+		else return !cond.execute();
+	}
 }

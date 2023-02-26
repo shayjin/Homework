@@ -73,7 +73,7 @@ class Assign implements Stmt {
 		if (type == 1) {
 			assignTo.allocateOnHeap();
 		} else if (type == 2) {
-			assignTo.assign(assignFrom);
+			assignTo.assignShare(assignFrom);
 		} else if (type == 3) {
 			assignTo.assignExpr(expr);
 		}

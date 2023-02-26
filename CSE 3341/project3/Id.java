@@ -45,12 +45,12 @@ class Id {
 		Executor.allocate(identifier, 0);
 	}
 
-	void assign(Id val) {
-		Executor.allocate(identifier, Integer.parseInt(val.identifier));
+	void assignShare(Id val) {
+		Executor.allocateShare(identifier, val.identifier);
 	}
 
 	void assignExpr(Expr expr) {
-		Executor.allocate(identifier, expr.execute());
+		Executor.assign(identifier, expr.execute());
 	}
 
 	void allocateOnHeap() {

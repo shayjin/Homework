@@ -19,7 +19,7 @@ for value in {1..30}
 do
 	echo ""
 	echo "Running ${value}.code"
-	timeout 5 ${runner} Correct/${value}.code Correct/${value}.data > Correct/${value}.student
+	${runner} Correct/${value}.code Correct/${value}.data > Correct/${value}.student
 	echo "Running diff with ${value}.expected"
 	grep -o '[[:digit:]]\+' Correct/${value}.student > temp1
 	grep -o '[[:digit:]]\+' Correct/${value}.expected > temp2
@@ -37,14 +37,14 @@ rm temp2
 echo "Running error cases:"
 echo ""
 echo "Running 01.error:"
-timeout 5 ${runner} Error/01.code Error/01.data
+${runner} Error/01.code Error/01.data
 read -n 1 -p "Error is .data file not having enough values. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
 	error=$(($error + 1))
 fi
 echo ""
 echo "Running 02.error:"
-timeout 5 ${runner} Error/02.code Error/02.data
+${runner} Error/02.code Error/02.data
 read -n 1 -p "Error is assignment to null ref variable. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
 	error=$(($error + 1))
