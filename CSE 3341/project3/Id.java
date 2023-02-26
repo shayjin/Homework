@@ -1,3 +1,5 @@
+import java.net.IDN;
+
 class Id {
 	String identifier;
 	
@@ -39,10 +41,15 @@ class Id {
 
 	void allocateId() {
 		Executor.allocate(identifier, 0);
+		Executor.allocateOnHeap(identifier);
 	}
 
 	void allocateRef() {
 		Executor.allocate(identifier, 0);
+	}
+
+	void assignRef() {
+		Executor.allocateOnHeap(identifier);
 	}
 
 	void assignShare(Id val) {

@@ -7,8 +7,8 @@ import java.util.Stack;
 public class Executor {
     public static Map<String, Integer> global;       
     public static Stack<Map<String, Integer>> stack;  
-    static List<Integer> heap; 
-    static Map<String, String> shared;
+    static List<String> heap; 
+    public static Map<String, String> shared;
     public static Scanner scanner;
 
 
@@ -38,24 +38,47 @@ public class Executor {
     }
 
     public static void allocateShare(String ref, String name) {
-        shared.put(ref, name);
+        if (shared.containsKey(name)) {
+            allocateShare(ref, shared.get(name));
+        } else {
+            shared.put(ref, name);
+            heap.add(ref);
+        }   
     }
 
     public static void allocateOnHeap(String name) {
         boolean contains = false;
+        
+        if (shared.containsKey(name)) {
+            shared.remove(name);
+        }
 
         for (int i = 0; i < stack.size() - 1 ; i++) {
             if (stack.get(i).containsKey(name)) {
-                heap.add(stack.get(i).get(name));
+                heap.add(name);
                 contains = true;
                 return;
             }
         }
 
-        if (!contains) heap.add(global.get(name));
+        if (!contains) {
+            heap.add(name);
+            contains = true;
+        }
+
+
+        if (!contains) {
+            System.out.println("erorr");
+            System.exit(-1);
+        }
     }
 
     public static void assign(String name, int value) {
+        if (!heap.contains(name)) {
+            System.out.println("erorr");
+            System.exit(-1);
+        }
+        
         if (shared.containsKey(name)) {
             assign(shared.get(name), value);
         } else {
