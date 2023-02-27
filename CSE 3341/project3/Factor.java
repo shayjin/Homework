@@ -63,7 +63,7 @@ class Factor {
 			Interpretor.scanner.nextTok();
 
 			if (Interpretor.scanner.currentTok() == Fun.EOS) {
-				System.out.println("input error");
+				System.out.println("Errror: No more data to read. ");
 				System.exit(-1);
 				return 0;
 			}

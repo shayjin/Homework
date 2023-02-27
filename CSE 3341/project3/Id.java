@@ -43,7 +43,7 @@ class Id {
 	}
 
 	void allocateRef() {
-		Interpretor.allocate(identifier, 0);
+		Interpretor.allocate(identifier);
 	}
 
 	void assignRef() {

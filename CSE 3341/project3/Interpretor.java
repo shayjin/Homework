@@ -37,6 +37,16 @@ public class Interpretor {
         }
     }
 
+    public static void allocate(String name) {
+        if (stack.isEmpty()) {
+            global.put(name, null);
+        } else {
+            Map<String, Integer> top = stack.pop();
+            top.put(name, null);
+            stack.push(top);
+        }
+    }
+
     public static void allocateShare(String ref, String name) {
         if (shared.containsKey(name)) {
             allocateShare(ref, shared.get(name));
@@ -66,14 +76,14 @@ public class Interpretor {
 
 
         if (!contains) {
-            System.out.println("erorr");
+            System.out.println("Error: Assignment to a null ref variable. ");
             System.exit(-1);
         }
     }
 
     public static void assign(String name, int value) {
         if (!heap.contains(name)) {
-            System.out.println("erorr");
+            System.out.println("Error: Assignment to a null ref variable. ");
             System.exit(-1);
         }
         
