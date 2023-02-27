@@ -215,7 +215,7 @@ def PCA(X, out_dim):
 
     ### Your job 1 starts here ###
 
-    mu = np.mean(X, axis=1).reshape(-1, 1)
+    mu = np.mean(X, 1).reshape(-1, 1)
     Sigma = np.cov(X - mu) # cov(B) = B^t * B
 
     ### Your job 1 ends here ###
