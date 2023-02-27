@@ -58,15 +58,17 @@ public class Interpretor {
 
     public static void allocateOnHeap(String name) {
         boolean contains = false;
+        int i = 0;
         
         if (shared.containsKey(name)) shared.remove(name);
 
-        for (int i = 0; i < stack.size() - 1 ; i++) {
+        while (i < stack.size() - 1 && !contains) {
             if (stack.get(i).containsKey(name)) {
                 heap.add(name);
                 contains = true;
-                return;
             }
+            
+            i++;
         }
 
         if (!contains) {
@@ -86,18 +88,23 @@ public class Interpretor {
             System.out.println("Error: Assignment to a null ref variable. ");
             System.exit(-1);
         }
+
+        boolean contains = false;
+        int i = stack.size() - 1;
         
         if (shared.containsKey(name)) {
             assign(shared.get(name), value);
         } else {
-            for (int i = stack.size() - 1; i >= 0 ; i--) {
+            while (i >= 0 && !contains) {
                 if (stack.get(i).containsKey(name)) {
                     stack.get(i).put(name, value);
-                    return;
+                    contains = true;
                 }
+
+                i--;
             }
     
-            if (global.containsKey(name)) global.replace(name, value);
+            if (global.containsKey(name) && !contains) global.replace(name, value);
         }
     }
 
